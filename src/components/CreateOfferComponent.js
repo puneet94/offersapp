@@ -9,8 +9,7 @@ import {
     StyleSheet,
     Button, Alert, Image, TouchableHighlight, ScrollView, ActivityIndicator
 } from 'react-native';
-const dotenv = require('dotenv').config();
-const API_URL = process.env.API_URL;
+import { API_URL } from '../../support';
 import Geolocation from '@react-native-community/geolocation';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Dimensions } from 'react-native';
