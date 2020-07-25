@@ -5,11 +5,11 @@ import {
 
     View,
     Text,
-    StyleSheet, Dimensions, Image
+    StyleSheet, Dimensions, Image, TouchableOpacity
 } from 'react-native';
 import distanceTwoPoints from "../services/common";
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import { useNavigation } from '@react-navigation/native';
 const windowHeight = Dimensions.get('window').height;
 class OffersListItemComponent extends Component {
 
@@ -38,12 +38,16 @@ class OffersListItemComponent extends Component {
         }
     }
     render = () => {
-        console.log("rendered");
+        const { navigation } = this.props;
+       
         const item = this.props.item
         const imageUrl = (this.props.item.images && this.props.item.images.length) ? this.props.item.images[0].imageUrl : "https://www.sylvansport.com/wp/wp-content/uploads/2018/11/image-placeholder-1200x800.jpg";
         const imageHeight = windowHeight / 4;
         return (
             <View style={styles.item}>
+                <TouchableOpacity onPress={() => navigation.navigate('Offer',{
+                    _id:item._id
+                })}>
                 <View>
                     <Image source={{ uri: imageUrl }} style={{ height: imageHeight }} />
 
@@ -54,6 +58,7 @@ class OffersListItemComponent extends Component {
                     <Text style={styles.distance}>{this.state.distance}</Text>
                     <Icon name="git-commit" size={30} color="#900" />
                 </View>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -87,4 +92,11 @@ const styles = StyleSheet.create({
         fontSize: 16
     }
 });
-export default OffersListItemComponent;
+//export default OffersListItemComponent;
+
+
+export default function(props) {
+    const navigation = useNavigation();
+  
+    return <OffersListItemComponent {...props} navigation={navigation} />;
+  }

@@ -13,9 +13,9 @@ import {
 } from 'react-native';
 
 import supportObj from '../../support';
-
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const API_URL = supportObj.API_URL;
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import OffersListItemComponent from "./OffersListItemComponent";
 import { withSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -26,7 +26,7 @@ class OffersListComponent extends Component {
 
 		this.state = {
 			posts: [],
-			modalVisible: true,
+			modalVisible: false,
 			refreshing: true,
 			activeFilterBox: "sort"
 		}

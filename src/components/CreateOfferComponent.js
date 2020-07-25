@@ -9,7 +9,8 @@ import {
     StyleSheet,
     Button, Alert, Image, TouchableHighlight, ScrollView, ActivityIndicator
 } from 'react-native';
-import { API_URL } from '../../support';
+import supportObj from '../../support';
+const API_URL = supportObj.API_URL;
 import Geolocation from '@react-native-community/geolocation';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Dimensions } from 'react-native';

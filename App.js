@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import OffersListComponent from "./src/components/OffersListComponent";
 import CreateOfferComponent from "./src/components/CreateOfferComponent";
+import SingleOfferComponent from "./src/components/SingleOfferComponent";
+
 import ProfileComponent from "./src/components/ProfileComponent";
 import StoresListComponent from "./src/components/StoresListComponent";
 import {
@@ -21,9 +23,24 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 const tabBarIconSize = 20;
+
+
+const Stack = createStackNavigator();
+
+function MyStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Offers" component={OffersListComponent} />
+      <Stack.Screen name="Offer" component={SingleOfferComponent} />
+    </Stack.Navigator>
+  );
+}
+
+
 const Tab = createBottomTabNavigator();
 const App = () => {
 	return (
@@ -41,7 +58,7 @@ const App = () => {
 					// 	height: 50, justifyContent: "center", alignItems: "center"
 					// }
 				}}>
-					<Tab.Screen name="Offers" component={OffersListComponent}
+					<Tab.Screen name="Offers" component={MyStack}
 						options={{
 							tabBarLabel: ({ focused }) => {
 								let color = "red";
