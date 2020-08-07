@@ -10,15 +10,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 function OffersFilter(props) {
 
 
-    let objData2 = {
-        type: "offer",
-        sort: "discounth",
-        distance: 5,
-        discount: "any",
-        category: ["all"],
-    }
     const [activeFilterBox, setActiveFilterBox] = useState("type");
-    const [objData, setObjData] = useState(objData2);
+    const [objData, setObjData] = useState(props.objData2);
     const [type, setType] = useState(objData.type);
     const [sort, setSort] = useState(objData.sort);
     const [distance, setDistance] = useState(objData.distance);
@@ -31,7 +24,7 @@ function OffersFilter(props) {
         setDistance(5);
         setDiscount("any");
         setCategory(["all"]);
-        setObjData(objData2);
+        setObjData(props.objData2);
         setModalVisible(false);
     }
     const applyFilters=()=>{
@@ -43,6 +36,7 @@ function OffersFilter(props) {
             category,
         });
         setModalVisible(false);
+        props.getPosts(objData);
     }
     return (
         <View style={{flex:1,flexDirection:"row"}}>

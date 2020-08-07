@@ -5,18 +5,14 @@ import {
 
 	FlatList,
 	View,
-	Text,
-	StyleSheet,
-	
-	TouchableHighlight,
-	TouchableOpacity
+	StyleSheet
 } from 'react-native';
 
 import supportObj from '../../support';
 const API_URL = supportObj.API_URL;
 
 import OffersListItemComponent from "./OffersListItemComponent";
-import { withSafeAreaInsets } from 'react-native-safe-area-context';
+
 import OffersFilter from './OffersFilter';
 
 class OffersListComponent extends Component {
@@ -59,7 +55,7 @@ class OffersListComponent extends Component {
 		return (
 			<View style={styles.container}>
 				<View style={{ flex: 1 }}>
-				<OffersFilter />
+				<OffersFilter getPosts={this.getPosts} objData2 = { {type: "offer",sort: "discounth",distance: 5,discount: "any",category: ["all"]}}/>
 				</View>
 				<View style={{ flex: 9 }}>
 					{this.state.posts.length ? <FlatList

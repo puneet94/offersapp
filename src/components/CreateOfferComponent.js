@@ -5,9 +5,10 @@ import {
 
     TextInput,
     View,
+    Text,
     Platform,
     StyleSheet,
-    Button, Alert, Image, TouchableHighlight, ScrollView, ActivityIndicator
+    Button, Alert, Image, TouchableHighlight, ScrollView, ActivityIndicator, TouchableOpacity
 } from 'react-native';
 import supportObj from '../../support';
 const API_URL = supportObj.API_URL;
@@ -18,17 +19,36 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Loader from "./Loader";
+const items = [{
+    id: 'electronics',
+    name: 'electronics'
+}, {
+    id: 'clothing',
+    name: 'clothing'
+}, {
+    id: 'accessories',
+    name: 'accessories'
+}, {
+    id: 'footwear',
+    name: 'footwear'
+}
+];
 class CreateOfferComponent extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
+            selectedItems: [],
             loading: false,
             post: {
                 coords: {},
                 title: "Default title",
-                content: "Default Content"
+                content: "Default Content",
+                type: "offer",
+                discount: "10",
+                price: "0",
+                category: ["all"]
             },
             photos: [
                 /*{
@@ -57,7 +77,7 @@ class CreateOfferComponent extends Component {
     getPosts = async () => {
         try {
             let response = await fetch(
-                API_URL+"/post/getPosts"
+                API_URL + "/post/getPosts"
             );
             let json = await response.json();
             return json;
@@ -91,20 +111,14 @@ uri: "content://media/external/images/media/3733"
         }
 
     }
-    changePostContent = (value) => {
-        this.setState((prevstate) => {
-            return {
-                post: { ...prevstate.post, content: value }
-            }
-        })
-    }
+
     postData = async (post) => {
         this.setState({
             loading: true
         });
         const imageResponse = await this.uploadImages();
         post.images = imageResponse.images;
-        const URL = API_URL+"/post/create";
+        const URL = API_URL + "/post/create";
         const response = await fetch(URL, {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
             headers: {
@@ -119,7 +133,7 @@ uri: "content://media/external/images/media/3733"
                 post: {
                     ...prevstate.post, title: "Default title",
                     content: "Default Content",
-                    
+
                 },
                 photos: []
             }
@@ -133,16 +147,13 @@ uri: "content://media/external/images/media/3733"
             ],
             { cancelable: false }
         );
-
-
-
         console.log(response.json()); // parses JSON response into native JavaScript objects
 
     }
-    changePostTitle = (value) => {
+    changePostAttribute = (name, value) => {
         this.setState((prevstate) => {
             return {
-                post: { ...prevstate.post, title: value }
+                post: { ...prevstate.post, [name]: value }
             }
         })
     }
@@ -168,7 +179,7 @@ uri: "content://media/external/images/media/3733"
     };
 
     uploadImages = async () => {
-        const URL = API_URL+"/upload/multipleUpload";
+        const URL = API_URL + "/upload/multipleUpload";
 
         const data = new FormData();
 
@@ -277,14 +288,19 @@ uri: "content://media/external/images/media/3733"
 
         );
     }
+    onSelectedItemsChange = selectedItems => {
+        this.setState({ selectedItems });
+    };
     render = () => {
+        const { selectedItems } = this.state;
         return (
             <ScrollView>
                 <View style={styles.container}>
                     <Loader loading={this.state.loading} />
-                    <TextInput style={styles.titleStyle} value={this.state.post.title} onChangeText={(value) => this.changePostTitle(value)} />
-
-                    <TextInput multiline style={styles.contentStyle} value={this.state.post.content} onChangeText={(value) => this.changePostContent(value)} />
+                    <Text>{"Title"}</Text>
+                    <TextInput style={styles.titleStyle} value={this.state.post.title} onChangeText={(value) => this.changePostAttribute("title", value)} />
+                    <Text>{"Content"}</Text>
+                    <TextInput multiline style={styles.contentStyle} value={this.state.post.content} onChangeText={(value) => this.changePostAttribute("content", value)} />
                     <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
                         {
                             this.state.photos.length ? this.state.photos.map((photo) => {
@@ -292,9 +308,17 @@ uri: "content://media/external/images/media/3733"
                             }) : null
                         }
                     </View>
+                    <Text>{"Price"}</Text>
+                    <TextInput style={styles.titleStyle} value={this.state.post.price} keyboardType='numeric' onChangeText={(value) => this.changePostAttribute("price", value)} />
+                    <Text>{"Discount"}</Text>
+                    <TextInput style={styles.titleStyle} value={this.state.post.discount} keyboardType='numeric' onChangeText={(value) => this.changePostAttribute("discount", value)} />
+                    <Text>{"Select Category"}</Text>
+                    <TouchableOpacity style={{borderColor:"black",borderWidth:1, height:50,flex:1,marginTop:10}}>
+                    
 
+                    </TouchableOpacity>
                     <Button title="Upload  images" onPress={this.uploadImage} />
-                    <View style={{marginVertical:20}}/>
+                    <View style={{ marginVertical: 20 }} />
                     <Button style={{ marginVertical: 20 }} title="Submit Post" onPress={() => this.postData(this.state.post)} />
 
                 </View >
