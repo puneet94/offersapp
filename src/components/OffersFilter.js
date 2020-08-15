@@ -10,8 +10,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 function OffersFilter(props) {
 
 
+    const objData = { type: "offer", sort: "-discount", distance: 5, discount: "any", category: "any" };
+    
+    
     const [activeFilterBox, setActiveFilterBox] = useState("type");
-    const [objData, setObjData] = useState(props.objData2);
     const [type, setType] = useState(objData.type);
     const [sort, setSort] = useState(objData.sort);
     const [distance, setDistance] = useState(objData.distance);
@@ -20,23 +22,24 @@ function OffersFilter(props) {
     const [modalVisible, setModalVisible] = useState(false);
     let clearAll = () => {
         setType("offer");
-        setSort("discounth");
+        setSort("-discount");
         setDistance(5);
         setDiscount("any");
-        setCategory(["all"]);
-        setObjData(props.objData2);
+        setCategory("all");
+
+        props.updateQuery(objData);
         setModalVisible(false);
     }
     const applyFilters=()=>{
-        setObjData ( {
+
+        setModalVisible(false);
+        props.updateQuery({
             type,
             sort,
             distance,
             discount,
             category,
         });
-        setModalVisible(false);
-        props.getPosts(objData);
     }
     return (
         <View style={{flex:1,flexDirection:"row"}}>
@@ -58,7 +61,7 @@ function OffersFilter(props) {
                 >
                     <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
                         
-                        <Text style={styles.filterUnitText}>{"Type : "+objData.type}</Text>
+                        <Text style={styles.filterUnitText}>{"Type : "+type}</Text>
                     </View>
                 </TouchableHighlight>
                 <TouchableHighlight
@@ -67,7 +70,7 @@ function OffersFilter(props) {
                 >
                     <View style={{ flex: 1, flexDirection: "row" }}>
                         
-                        <Text style={styles.filterUnitText}>{"Sort : "+(objData.sort.substring(0, sort.length - 1)) +" : "+ (objData.sort.endsWith("l")?" Low to high":" High to Low")}</Text>
+                        <Text style={styles.filterUnitText}>{"Sort : "+(sort.startsWith("-")?sort.substr(1):sort) +" : "+ (sort.startsWith("-")?" High to Low":" Low to high ")}</Text>
                     </View>
                 </TouchableHighlight>
                 <TouchableHighlight
@@ -76,7 +79,7 @@ function OffersFilter(props) {
                 >
                     <View style={{ flex: 1, flexDirection: "row" }}>
                         
-                        <Text style={styles.filterUnitText}>{"Distance : "+objData.distance+"Kms"}</Text>
+                        <Text style={styles.filterUnitText}>{"Distance : "+distance+"Kms"}</Text>
                     </View>
                 </TouchableHighlight>
                 <TouchableHighlight
@@ -85,7 +88,7 @@ function OffersFilter(props) {
                 >
                     <View style={{ flex: 1, flexDirection: "row" }}>
                         
-                        <Text style={styles.filterUnitText}>{"Discount : "+objData.discount+ "% and more"}</Text>
+                        <Text style={styles.filterUnitText}>{"Discount : "+discount+ "% and more"}</Text>
                     </View>
                 </TouchableHighlight>
                 <TouchableHighlight
@@ -94,7 +97,7 @@ function OffersFilter(props) {
                 >
                     <View style={{ flex: 1, flexDirection: "row" }}>
                         
-                        <Text style={styles.filterUnitText}>{"Category : "+objData.category.join(", ")}</Text>
+                        <Text style={styles.filterUnitText}>{"Category : "+category}</Text>
                     </View>
                 </TouchableHighlight>
             </ScrollView>

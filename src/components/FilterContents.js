@@ -4,17 +4,17 @@ import CheckBox from '@react-native-community/checkbox';
 
 import React from 'react';
 
-import { StyleSheet, View,  Text } from "react-native";
+import { StyleSheet, View, Text } from "react-native";
 
 const filterContents = (activeFilterBox, obj) => {
     const {
         type, setType, sort, setSort, distance, setDistance, discount, setDiscount, category, setCategory
     } = obj;
-    console.log(category);
-    
+
+
     switch (activeFilterBox) {
         case "type":
-            return (<View style={{ flex: 1,justifyContent:"flex-start",alignItems:"flex-start" }}>
+            return (<View style={{ flex: 1, justifyContent: "flex-start", alignItems: "flex-start" }}>
                 {["offer", "donation"].map((item) => {
                     return (
                         <View style={styles.checkBoxContainer} key={item}>
@@ -29,7 +29,7 @@ const filterContents = (activeFilterBox, obj) => {
                                 }}
                             />
                             <View style={styles.checkBoxTextContainer}>
-                                <Text style={{ fontSize: 20, textTransform: 'capitalize' }}>{item }</Text>
+                                <Text style={{ fontSize: 20, textTransform: 'capitalize' }}>{item}</Text>
                             </View>
                         </View>
                     )
@@ -38,22 +38,22 @@ const filterContents = (activeFilterBox, obj) => {
         case "sort":
             return (<View style={{ flex: 1, alignItems: "stretch" }}>
 
-                {[{ "label": "discount", value: "l" }, { "label": "discount", value: "h" }, { label: "distance", value: "l" }, { label: "distance", value: "h" }].map((item, index) => {
+                {[{ "label": "discount", value: "" }, { "label": "discount", value: "-" }, { label: "price", value: "" }, { label: "price", value: "-" }].map((item, index) => {
                     return (
                         <View style={styles.checkBoxContainer} key={item.label + item.value}>
                             <View style={{ flex: 2, alignItems: "center" }}>
                                 <RadioButton style={styles.checkBox}
 
-                                    selected={(sort == (item.label + item.value)) ? true : false}
+                                    selected={(sort == (item.value + item.label)) ? true : false}
                                     onPress={() => {
 
-                                        setSort(item.label + item.value)
+                                        setSort(item.value + item.label)
                                     }}
                                 />
 
                             </View>
                             <View style={[styles.checkBoxTextContainer, { flex: 9 }]}>
-                                <Text style={{ fontSize: 15, textTransform: 'capitalize' }}>{item.label + " : " + ((item.value == "l") ? "Low to High" : "High to Low")}</Text>
+                                <Text style={{ fontSize: 15, textTransform: 'capitalize' }}>{item.label + " : " + ((item.value == "") ? "Low to High" : "High to Low")}</Text>
                             </View>
                         </View>
                     )
@@ -125,37 +125,27 @@ const filterContents = (activeFilterBox, obj) => {
         case "category":
             return (<View style={{ flex: 1, alignItems: "stretch" }}>
                 <View style={styles.checkBoxContainer}>
-                    <CheckBox
+
+                    <RadioButton
                         style={styles.checkBox}
-                        disabled={false}
-                        value={(category.indexOf("all") > -1) ? true : false}
-                        onValueChange={(val) => {
-                            if (val) {
-                                setCategory(["all"])
-                                console.log(category);
-                            } else {
-                                setCategory(category.filter(item => item != "all"))
-                                console.log(category);
-                            }
+
+                        selected={(category == "any") ? true : false}
+                        onPress={() => {
+                            setCategory("any")
+
                         }}
                     />
                     <View style={styles.checkBoxTextContainer}>
-                        <Text style={{ fontSize: 20 }}>{"All"}</Text></View>
+                        <Text style={{ fontSize: 20 }}>{"Any"}</Text></View>
                 </View>
                 {["electronics", "clothing", "footwear", "food"].map((item) => {
                     return (
                         <View style={styles.checkBoxContainer} key={item}>
-                            <CheckBox style={styles.checkBox}
-                                disabled={(category.indexOf("all") > -1)}
-                                value={((category.indexOf("all") > -1) || (category.indexOf(item) > -1)) ? true : false}
-                                onValueChange={(val) => {
-                                    if (val) {
-                                        setCategory([...category, item])
-                                        console.log(category);
-                                    } else {
-                                        setCategory(category.filter(item => item != item))
-                                        console.log(category);
-                                    }
+                            <RadioButton style={styles.checkBox}
+                                
+                                selected={(category == item) ? true : false}
+                                onPress={() => {
+                                    setCategory(item)
                                 }}
                             />
                             <View style={styles.checkBoxTextContainer}>
@@ -188,4 +178,4 @@ const styles = StyleSheet.create({
     },
     checkBox: { margin: 15 },
     checkBoxTextContainer: { marginVertical: 16, marginHorizontal: 10 },
-    });
+});
