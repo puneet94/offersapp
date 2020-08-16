@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 
 import {
-
     View,
     Text,
     StyleSheet, Dimensions, Image, TouchableOpacity
@@ -10,6 +9,9 @@ import {
 import distanceTwoPoints from "../services/common";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+
+import Geolocation from '@react-native-community/geolocation';
+
 const windowHeight = Dimensions.get('window').height;
 class OffersListItemComponent extends Component {
 
@@ -27,9 +29,9 @@ class OffersListItemComponent extends Component {
             distanceTwoPoints(this.props.item.loc[1], this.props.item.loc[0], "K", (distance) => {
 
                 if (distance < 1) {
-                    distance = Math.round(distance * 1000) + "m"
+                    distance = Math.round(distance * 1000) + " m"
                 } else {
-                    distance = distance + "km"
+                    distance = Math.round(distance) + " km"
                 }
                 this.setState({
                     distance

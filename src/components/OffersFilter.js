@@ -25,7 +25,7 @@ function OffersFilter(props) {
         setSort("-discount");
         setDistance(5);
         setDiscount("any");
-        setCategory("all");
+        setCategory("any");
 
         props.updateQuery(objData);
         setModalVisible(false);

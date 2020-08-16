@@ -38,7 +38,7 @@ const filterContents = (activeFilterBox, obj) => {
         case "sort":
             return (<View style={{ flex: 1, alignItems: "stretch" }}>
 
-                {[{ "label": "discount", value: "" }, { "label": "discount", value: "-" }, { label: "price", value: "" }, { label: "price", value: "-" }].map((item, index) => {
+                {[{ "label": "distance", value: "" },{ "label": "discount", value: "" }, { "label": "discount", value: "-" }, { label: "price", value: "" }, { label: "price", value: "-" }].map((item, index) => {
                     return (
                         <View style={styles.checkBoxContainer} key={item.label + item.value}>
                             <View style={{ flex: 2, alignItems: "center" }}>

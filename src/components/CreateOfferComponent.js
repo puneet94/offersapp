@@ -8,11 +8,13 @@ import {
     Text,
     Platform,
     StyleSheet,
-    Button, Alert, Image, TouchableHighlight, ScrollView, ActivityIndicator, TouchableOpacity
+    Button, Alert, Image, TouchableHighlight, ScrollView,Picker
 } from 'react-native';
 import supportObj from '../../support';
 const API_URL = supportObj.API_URL;
 import Geolocation from '@react-native-community/geolocation';
+//import Picker from '@react-native-community/picker';
+
 import ImagePicker from 'react-native-image-crop-picker';
 import { Dimensions } from 'react-native';
 const windowWidth = Dimensions.get('window').width;
@@ -48,7 +50,9 @@ class CreateOfferComponent extends Component {
                 type: "offer",
                 discount: "10",
                 price: "0",
-                category: ["all"]
+                category: "",
+                type: "offer"
+
             },
             photos: [
                 /*{
@@ -313,10 +317,34 @@ uri: "content://media/external/images/media/3733"
                     <Text>{"Discount"}</Text>
                     <TextInput style={styles.titleStyle} value={this.state.post.discount} keyboardType='numeric' onChangeText={(value) => this.changePostAttribute("discount", value)} />
                     <Text>{"Select Category"}</Text>
-                    <TouchableOpacity style={{borderColor:"black",borderWidth:1, height:50,flex:1,marginTop:10}}>
-                    
+                    <View >
+                        <Picker
+                            selectedValue={this.state.post.category}
+                            style={{ height: 50, width: 150 }}
+                            onValueChange={(value) => this.changePostAttribute("category", value)}
+                        >
+                            <Picker.Item label="Electronics" value="electronics" />
+                            <Picker.Item label="Footwear" value="footwear" />
+                            <Picker.Item label="Clothing" value="clothing" />
+                            <Picker.Item label="Mobiles" value="mobiles" />
+                        </Picker>
 
-                    </TouchableOpacity>
+                    </View>
+
+
+                    <Text>{"Select Type"}</Text>
+                    <View >
+                        <Picker
+                            selectedValue={this.state.post.type}
+                            style={{ height: 50, width: 150 }}
+                            onValueChange={(value) => this.changePostAttribute("type", value)}
+                        >
+                            <Picker.Item label="Offer" value="offer" />
+                            <Picker.Item label="Donation" value="donation" />
+                            
+                        </Picker>
+
+                    </View>
                     <Button title="Upload  images" onPress={this.uploadImage} />
                     <View style={{ marginVertical: 20 }} />
                     <Button style={{ marginVertical: 20 }} title="Submit Post" onPress={() => this.postData(this.state.post)} />

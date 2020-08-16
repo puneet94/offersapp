@@ -12,6 +12,7 @@ import {
 import supportObj from '../../support';
 const API_URL = supportObj.API_URL;
 
+import Geolocation from '@react-native-community/geolocation';
 import OffersListItemComponent from "./OffersListItemComponent";
 
 import OffersFilter from './OffersFilter';
@@ -34,7 +35,7 @@ class OffersListComponent extends Component {
 			page: 1
 		}
 	}
-	encodeQueryString = (params)=> {
+	encodeQueryString = (params) => {
 		const keys = Object.keys(params)
 		return keys.length
 			? "?" + keys
@@ -43,32 +44,62 @@ class OffersListComponent extends Component {
 				.join("&")
 			: ""
 	}
-	updateQuery = (obj)=>{
+	updateQuery = (obj) => {
 		this.setState({
-			obj
-		},()=>{
+			obj,
+			page: 1,
+			posts: []
+		}, () => {
 			this.getPosts();
 		})
 	}
-	getPosts = async () => {	
-		
-		const queryString = (this.encodeQueryString(this.state.obj));
+	refreshPosts = () => {
+		console.log("called");
+		this.setState({
+			posts: [],
+			page: 1,
+		}, () => {
+			this.getPosts()
+		})
+	}
 
-		try {
+	fetchPosts = async(info,queryString)=>{
+		console.log(info.coords)
+
+			const URL = `${API_URL}/post/getPosts${queryString}&page=${ this.state.page}&latitude=${info.coords.latitude}&longitude=${info.coords.longitude}`
+				
+			console.log(URL);
 			let response = await fetch(
-				API_URL + "/post/getPosts"+queryString+"&page="+this.state.page
-			);
-			let json = await response.json();
-			const posts = json.docs;
+				URL	
+				);
+				let json = await response.json();
+				const posts = json.docs;
 
-			this.setState({
-				posts,
-				refreshing: false
+				this.setState(prevstate => ({
+					posts: [...prevstate.posts, ...posts],
+					refreshing: false
+				})
+				);
+
+	}
+	getPosts = async () => {
+		const queryString = (this.encodeQueryString(this.state.obj));
+		try {
+
+			Geolocation.getCurrentPosition(info => {
+				this.fetchPosts(info,queryString)
+
+
 			});
 
 		} catch (error) {
 			console.error(error);
 		}
+
+
+
+
+
 	}
 	componentDidMount = async () => {
 		this.getPosts();
@@ -81,9 +112,9 @@ class OffersListComponent extends Component {
 			this.state.refreshing ? <ActivityIndicator size="large" color="black" /> : <View />
 		);
 	}
-	loadMoreOffers = ()=>{
-		
-		this.setState(prevstate => ({ page: prevstate.page + 1}),()=>{
+	loadMoreOffers = () => {
+
+		this.setState(prevstate => ({ page: prevstate.page + 1 }), () => {
 			this.getPosts()
 		});
 	}
@@ -103,7 +134,7 @@ class OffersListComponent extends Component {
 						refreshing={this.state.refreshing}
 
 						onEndReached={this.loadMoreOffers}
-						onEndReachedThreshold={0.1}
+						onEndReachedThreshold={1}
 						onRefresh={this.refreshPosts}
 						ListFooterComponent={this.renderFooter}
 
