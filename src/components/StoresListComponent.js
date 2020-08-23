@@ -2,16 +2,14 @@
 import React, { Component } from 'react';
 
 import {
-
 	FlatList,
 	View,
-	Text,
 	StyleSheet
 } from 'react-native';
 
 import OffersListItemComponent from "./OffersListItemComponent"
 
-class OffersListComponent extends Component {
+class MyOffersListComponent extends Component {
 
 	constructor(props) {
 		super(props);
@@ -70,4 +68,4 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 	}
 });
-export default OffersListComponent;
+export default MyOffersListComponent;
