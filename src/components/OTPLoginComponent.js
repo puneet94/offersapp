@@ -8,6 +8,7 @@ import {
     ScrollView,
     TouchableHighlight, Dimensions, Button, TextInput
 } from 'react-native';
+import AsyncStorage from "@react-native-community/async-storage";
 import PhoneInput from "react-native-phone-input";
 import supportObj from '../../support';
 const API_URL = supportObj.API_URL;
@@ -31,17 +32,45 @@ class OTPLoginComponent extends Component {
 
         }
     }
-    getPost = async () => {
+    sendOTPAPI = async (contactDetails) => {
 
         try {
-            let response = await fetch(
-                API_URL
-            );
+           
+
+            const response = await fetch(`${API_URL}/user/sendOTP`, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify({ contactDetails }) // body data type must match "Content-Type" header
+            });
+
             let json = await response.json();
-            this.setState({ post: json, loading: false });
-            console.log("post found");
+           
+            console.log("contact details found");
             console.log(json);
-            this.props.navigation.pop();
+            return json;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    verifyOTPAPI = async (contactDetails) => {
+
+        try {
+            const response = await fetch(`${API_URL}/user/verifyOTP`, {
+                method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: JSON.stringify({contactDetails}) // body data type must match "Content-Type" header
+            });
+
+            let json = await response.json();
+           
+            console.log("contact details found");
+            console.log(json);
             return json;
         } catch (error) {
             console.error(error);
@@ -49,22 +78,65 @@ class OTPLoginComponent extends Component {
     }
 
 
-    componentDidMount = async () => {
-
-        //this.getPost();
-
-    }
+    
     onChangePhoneNumber = (number) => {
         console.log("number");
         console.log(number);
         this.setState({ number })
     }
+    verifyOTP = async ()=>{
+        try {
+           const verifiedNumber = await AsyncStorage.getItem('verifiedNumber');
+    
+           const mobilePhone = await AsyncStorage.getItem('mobilePhone');
+    
+           const countryCode = await  AsyncStorage.getItem('countryCode');
+            if (verifiedNumber !== null && mobilePhone !== null && countryCode !== null) {
+              this.verifyOTPAPI(
+                  {
+                      verifiedNumber,
+                      mobilePhone,
+                      countryCode
+                  
+              })
+            }
+          } catch (error) {
+            // Error retrieving data
+            console.log("not able to find contact details");
+          }
+    }
+
     sendOTP = () => {
+        console.log("mobile phone");
         console.log(this.state.number);
+
+        console.log("verified number");
         console.log(this.phone.getValue());
         console.log("phone number is");
         console.log(this.phone.getCountryCode())
-        this.setState({ otpScreen: true })
+        this.setState({ otpScreen: true });
+
+        AsyncStorage.setItem(
+            'verifiedNumber',
+            this.phone.getValue()
+          );
+
+        AsyncStorage.setItem(
+            'mobilePhone',
+            this.state.number
+          );
+
+        AsyncStorage.setItem(
+            'countryCode',
+            this.phone.getCountryCode()
+          );
+        this.sendOTPAPI({
+            
+                verifiedNumber: this.phone.getValue(),
+                mobilePhone: this.state.number,
+                countryCode: this.phone.getCountryCode(),
+            
+        })
     }
     phoneTextComponent = () => {
         return

@@ -410,4 +410,12 @@ __proto__: Object
 1: {imageUrl: "http://res.cloudinary.com/shoppingdirectory/image/upload/v1595049725/fc4p1fuyxrxk2l7am1ws.jpg", public_id: "fc4p1fuyxrxk2l7am1ws"}
 2: {imageUrl: "http://res.cloudinary.com/shoppingdirectory/image/upload/v1595049725/uaiydcxcfxgf1hyejp0a.jpg", public_id: "uaiydcxcfxgf1hy
 
+
+
+
+ #ifdef __IPHONE_13_0
+    if (@available(iOS 13.0, *)) {
+        labelColor = [UIColor labelColor];
+    }
+    #endif
 */
