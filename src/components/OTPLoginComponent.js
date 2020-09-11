@@ -50,6 +50,12 @@ class OTPLoginComponent extends Component {
            
             console.log("contact details found");
             console.log(json);
+
+            AsyncStorage.setItem(
+                'otpId',
+                json.result._id
+              );
+
             return json;
         } catch (error) {
             console.error(error);
@@ -68,9 +74,12 @@ class OTPLoginComponent extends Component {
             });
 
             let json = await response.json();
-           
+            if(json.token){
+                
+            }
             console.log("contact details found");
             console.log(json);
+            
             return json;
         } catch (error) {
             console.error(error);
@@ -84,19 +93,22 @@ class OTPLoginComponent extends Component {
         console.log(number);
         this.setState({ number })
     }
-    verifyOTP = async ()=>{
+    verifyOTP = async (otpNumber)=>{
         try {
            const verifiedNumber = await AsyncStorage.getItem('verifiedNumber');
     
            const mobilePhone = await AsyncStorage.getItem('mobilePhone');
     
            const countryCode = await  AsyncStorage.getItem('countryCode');
+           const _id = await AsyncStorage.getItem("otpId");
             if (verifiedNumber !== null && mobilePhone !== null && countryCode !== null) {
               this.verifyOTPAPI(
                   {
                       verifiedNumber,
                       mobilePhone,
-                      countryCode
+                      countryCode,
+                      otpNumber,
+                      _id
                   
               })
             }
@@ -159,6 +171,7 @@ class OTPLoginComponent extends Component {
                                 codeInputHighlightStyle={styles.underlineStyleHighLighted}
                                 placeholderTextColor={"black"} onCodeFilled={(code => {
                                     console.log(`Code is ${code}, you are good to go!`)
+                                    this.verifyOTP(code)
                                 })} />
                         </View>
                     </View> : <View style={{ flex: 1, padding: 30 }}>
