@@ -6,12 +6,14 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { Component } from 'react';
 import {
 	SafeAreaView,
 	StyleSheet,
 	Text, View
 } from 'react-native';
+
+import AsyncStorage from "@react-native-community/async-storage";
 import OffersListComponent from "./src/components/OffersListComponent";
 import CreateOfferComponent from "./src/components/CreateOfferComponent";
 import SingleOfferComponent from "./src/components/SingleOfferComponent";
@@ -40,121 +42,142 @@ function MyStack() {
 	);
 }
 
-function Home() {
-	return (
-		<Tab.Navigator tabBarOptions={{
-			labelPosition: "below-icon",
-			safeAreaInsets: { bottom: 10, top: 10 },
-			tabStyle: {
-				justifyContent: 'center'
-			}
-			// style: {
-			// 	backgroundColor: "yellow",
-			// 	height: 50, justifyContent: "center", alignItems: "center"
-			// }
-		}}>
-			<Tab.Screen name="Offers" component={MyStack}
-				options={{
-					tabBarLabel: ({ focused }) => {
-						let color = "red";
-						if (focused) {
-							color = "red";
-						} else {
-							color = "black";
-						}
-						return <Text style={{ color: color }}>{"Offers"}</Text>
-					},
-					tabBarIcon: ({ focused }) => {
-						let color = "red";
-						if (focused) {
-							color = "red";
-						} else {
-							color = "black";
-						}
-						return (<Icon name="home" color={color} size={tabBarIconSize} style={styles.iconStyles} />
-						)
-					},
-				}}
-			/>
-			<Tab.Screen name="My Offers" component={MyOffersListComponent}
-				options={{
-					tabBarLabel: ({ focused }) => {
-						let color = "red";
-						if (focused) {
-							color = "red";
-						} else {
-							color = "black";
-						}
-						return <Text style={{ color: color }}>{"My Offers"}</Text>
-					},
-					tabBarIcon: ({ focused }) => {
-						let color = "red";
-						if (focused) {
-							color = "red";
-						} else {
-							color = "black";
-						}
-						return (<Icon name="home" color={color} size={tabBarIconSize} style={styles.iconStyles} />
-						)
-					},
-				}}
-			/>
-			<Tab.Screen name="Create" component={CreateOfferComponent}
+class Home extends Component {
 
-				options={{
-					tabBarLabel: ({ focused }) => {
-						let color = "red";
-						if (focused) {
-							color = "red";
-						} else {
-							color = "black";
-						}
-						return <Text style={{ color: color }}>{"Create Offer"}</Text>
-					},
-					tabBarIcon: ({ focused }) => {
-						let color = "red";
-						if (focused) {
-							color = "red";
-						} else {
-							color = "black";
-						}
-						return (<Icon name="create-outline" color={color} size={tabBarIconSize} style={styles.iconStyles} />
-						)
-					},
-				}}
-			/>
 
-			<Tab.Screen name="Profile" component={ProfileComponent}
+	componentDidMount = async()=>{
+		
+	}
+	render() {
 
-				options={{
-					tabBarLabel: ({ focused }) => {
-						let color = "red";
-						if (focused) {
-							color = "red";
-						} else {
-							color = "black";
-						}
-						return (<View style={{ backgroundColor: "pink" }}>
-							<Text style={{ color: color }}>{"Profile "}</Text>
-						</View>)
-					},
-					tabBarIcon: ({ focused }) => {
-						let color = "red";
-						if (focused) {
-							color = "red";
-						} else {
-							color = "black";
-						}
-						return (<Icon name="create-outline" color={color} size={tabBarIconSize} style={styles.iconStyles} />
-						)
-					},
-				}}
-			/>
-		</Tab.Navigator>
-	);
-  }
+		return (
+			<Tab.Navigator tabBarOptions={{
+				labelPosition: "below-icon",
+				safeAreaInsets: { bottom: 10, top: 10 },
+				tabStyle: {
+					justifyContent: 'center'
+				}
+				// style: {
+				// 	backgroundColor: "yellow",
+				// 	height: 50, justifyContent: "center", alignItems: "center"
+				// }
+			}}>
+				<Tab.Screen name="Offers" component={MyStack}
+					options={{
+						tabBarLabel: ({ focused }) => {
+							let color = "red";
+							if (focused) {
+								color = "red";
+							} else {
+								color = "black";
+							}
+							return <Text style={{ color: color }}>{"Offers"}</Text>
+						},
+						tabBarIcon: ({ focused }) => {
+							let color = "red";
+							if (focused) {
+								color = "red";
+							} else {
+								color = "black";
+							}
+							return (<Icon name="home" color={color} size={tabBarIconSize} style={styles.iconStyles} />
+							)
+						},
+					}}
+				/>
+				<Tab.Screen name="My Offers" component={MyOffersListComponent}
+					options={{
+						tabBarLabel: ({ focused }) => {
+							let color = "red";
+							if (focused) {
+								color = "red";
+							} else {
+								color = "black";
+							}
+							return <Text style={{ color: color }}>{"My Offers"}</Text>
+						},
+						tabBarIcon: ({ focused }) => {
+							let color = "red";
+							if (focused) {
+								color = "red";
+							} else {
+								color = "black";
+							}
+							return (<Icon name="home" color={color} size={tabBarIconSize} style={styles.iconStyles} />
+							)
+						},
+					}}
+				/>
+				<Tab.Screen name="Create" component={CreateOfferComponent}
+
+					options={{
+						tabBarLabel: ({ focused }) => {
+							let color = "red";
+							if (focused) {
+								color = "red";
+							} else {
+								color = "black";
+							}
+							return <Text style={{ color: color }}>{"Create Offer"}</Text>
+						},
+						tabBarIcon: ({ focused }) => {
+							let color = "red";
+							if (focused) {
+								color = "red";
+							} else {
+								color = "black";
+							}
+							return (<Icon name="create-outline" color={color} size={tabBarIconSize} style={styles.iconStyles} />
+							)
+						},
+					}}
+				/>
+
+				<Tab.Screen name="Profile" component={ProfileComponent}
+
+					options={{
+						tabBarLabel: ({ focused }) => {
+							let color = "red";
+							if (focused) {
+								color = "red";
+							} else {
+								color = "black";
+							}
+							return (<View style={{ backgroundColor: "pink" }}>
+								<Text style={{ color: color }}>{"Profile "}</Text>
+							</View>)
+						},
+						tabBarIcon: ({ focused }) => {
+							let color = "red";
+							if (focused) {
+								color = "red";
+							} else {
+								color = "black";
+							}
+							return (<Icon name="create-outline" color={color} size={tabBarIconSize} style={styles.iconStyles} />
+							)
+						},
+					}}
+				/>
+			</Tab.Navigator>
+		);
+	}
+}
 const Tab = createBottomTabNavigator();
 const App = () => {
+
+	/*
+		try{
+			const token = await AsyncStorage.getItem('token');
+			if(token!=null){
+				this.setState({
+					token: token
+				})
+			}
+			
+		} catch (error) {
+			console.error(error);
+		}*/
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "red" }}>
 
@@ -163,7 +186,7 @@ const App = () => {
 					<Stack.Screen name="Home" component={Home} />
 					<Stack.Screen name="OTPLogin" component={OTPLoginComponent} />
 				</Stack.Navigator>
-				
+
 			</NavigationContainer>
 
 		</SafeAreaView >
