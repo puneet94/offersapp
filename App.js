@@ -96,6 +96,7 @@ class Home extends Component {
 							}
 							return <Text style={{ color: color }}>{"My Offers"}</Text>
 						},
+						
 						tabBarIcon: ({ focused }) => {
 							let color = "red";
 							if (focused) {
