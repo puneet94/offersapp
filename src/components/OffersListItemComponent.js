@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react';
+import analytics from '@react-native-firebase/analytics';
 
 import {
     View,

@@ -7,6 +7,8 @@
  */
 
 import React, { Component } from 'react';
+import analytics from '@react-native-firebase/analytics';
+
 import {
 	SafeAreaView,
 	StyleSheet,
@@ -45,8 +47,8 @@ function MyStack() {
 class Home extends Component {
 
 
-	componentDidMount = async()=>{
-		
+	componentDidMount = async () => {
+
 	}
 	render() {
 
@@ -96,7 +98,7 @@ class Home extends Component {
 							}
 							return <Text style={{ color: color }}>{"My Offers"}</Text>
 						},
-						
+
 						tabBarIcon: ({ focused }) => {
 							let color = "red";
 							if (focused) {
@@ -166,6 +168,8 @@ class Home extends Component {
 }
 const Tab = createBottomTabNavigator();
 const App = () => {
+	const routeNameRef = React.useRef();
+	const navigationRef = React.useRef();
 
 	/*
 		try{
@@ -182,7 +186,21 @@ const App = () => {
 	return (
 		<SafeAreaView style={{ flex: 1, backgroundColor: "red" }}>
 
-			<NavigationContainer>
+			<NavigationContainer ref={navigationRef}
+				onStateChange={(state) => {
+					const previousRouteName = routeNameRef.current;
+					const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+					if (previousRouteName !== currentRouteName) {
+						analytics().logScreenView({
+							screen_name: currentRouteName,
+							screen_class: currentRouteName,
+						}).then((response)=>{
+							console.log("response from firebase");
+							console.log(response);
+						});
+					}
+				}}>
 				<Stack.Navigator>
 					<Stack.Screen name="Home" component={Home} />
 					<Stack.Screen name="OTPLogin" component={OTPLoginComponent} />
