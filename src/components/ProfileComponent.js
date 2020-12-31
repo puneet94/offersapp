@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 
+import AsyncStorage from "@react-native-community/async-storage";
 import {
 
     TextInput,
@@ -17,6 +18,7 @@ class ProfileComponent extends Component {
         super(props);
 
         this.state = {
+            token: null,
             post: {
                 coords: {},
                 title: "Default title",
@@ -32,7 +34,17 @@ class ProfileComponent extends Component {
         }
     }
     componentDidMount = async () => {
-
+        try{
+            const token = await AsyncStorage.getItem('token');
+            if(token!=null){
+                this.setState({
+                    token: token
+                })
+            }
+            
+        } catch (error) {
+            console.error(error);
+        }
         try {
 
             Geolocation.getCurrentPosition(info => {

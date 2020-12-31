@@ -8,6 +8,7 @@ import {
     ScrollView,
     TouchableHighlight, Dimensions, Button, TextInput
 } from 'react-native';
+
 import AsyncStorage from "@react-native-community/async-storage";
 import PhoneInput from "react-native-phone-input";
 import supportObj from '../../support';
@@ -75,10 +76,16 @@ class OTPLoginComponent extends Component {
 
             let json = await response.json();
             if(json.token){
-                
+                console.log("contact details found");
+                console.log(json);
+
+
+                AsyncStorage.setItem(
+                    'token',
+                    json.token
+                  );
             }
-            console.log("contact details found");
-            console.log(json);
+           
             
             return json;
         } catch (error) {
